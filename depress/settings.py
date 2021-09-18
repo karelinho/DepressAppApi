@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG')
 
-ALLOWED_HOSTS = ['127.0.0.1', '192.168.167.2']
+ALLOWED_HOSTS = ['127.0.0.1', '192.168.167.2', 'depress-app.herokuapp.com']
 
 
 # Application definition
