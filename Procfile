@@ -1,0 +1,1 @@
+web: gunicorn depress.wsgi --log-file -
