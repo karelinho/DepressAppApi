@@ -18,6 +18,3 @@ class Depress(models.Model):
     physical_discomfort = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(4)])
     tense_feeling = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(4)])
     sleep_length = models.TextField(default='0', max_length=256, blank=True)
-
-    # class Meta:
-    # unique_together = (('user', 'date'),)
