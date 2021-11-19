@@ -34,7 +34,7 @@ class DepressViewSet(viewsets.ModelViewSet):
             subject = "sledovani priznaku deprese"
             body = "Tento email byl vygenerovan automaticky. Prosim neodpovidejte na nej. V případě dotazu mne kontaktujte na adrese karel.sluka@gmail.com"
             sender_email = "depressapp@gmail.com"
-            receiver_email = "pa.hvezdova@seznam.cz"
+            receiver_email = "karel.sluka@gmail.com"
             message = MIMEMultipart()
             message["From"] = sender_email
             message["To"] = receiver_email
