@@ -98,9 +98,10 @@ class DepressViewSet(viewsets.ModelViewSet):
             user = request.user
             # user = User.objects.get(id=1)
 
-            pyxl_df = pd.read_excel('karelsluka.xlsx', sheet_name=0, engine='openpyxl', dtype={'datum': date})
+            # pyxl_df = pd.read_excel('karelsluka.xlsx', sheet_name=0, engine='openpyxl', dtype={'datum': date})
+            pyxl_df = pd.read_excel('karelsluka.xlsx', sheet_name=0, engine='openpyxl')
             writer = pd.ExcelWriter('karelsluka.xlsx', engine='xlsxwriter', date_format='DD.MM.YYYY',
-                                    datetime_format='DD.M.YY')
+                                    datetime_format='DD.MM.YYYY')
             book = writer.book
             header_format = book.add_format({
                 'text_wrap': True,
