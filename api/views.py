@@ -131,6 +131,7 @@ class DepressViewSet(viewsets.ModelViewSet):
                 worksheet.set_row(0, 150)
                 worksheet.write(0, col_num, value, header_format)
             writer.save()
+            writer.close()
 
             try:
                 depress_data = Depress.objects.get(user=user.id, date=new_date)
