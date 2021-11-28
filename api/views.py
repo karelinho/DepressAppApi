@@ -125,8 +125,10 @@ class DepressViewSet(viewsets.ModelViewSet):
             })
             df = df.append(pyxl_df)
             pd.to_datetime(df['datum'])
-            df.to_excel(writer, sheet_name='New', startrow=0, index=False, freeze_panes=(1, 0))
-            worksheet = writer.sheets.setdefault('New')
+            # df.to_excel(writer, sheet_name='New', startrow=0, index=False, freeze_panes=(1, 0))
+            # worksheet = writer.sheets.setdefault('New')
+            df.to_excel(writer, sheet_name=0, startrow=0, index=False, freeze_panes=(1, 0))
+            worksheet = writer.sheets.setdefault(0)
             for col_num, value in enumerate(df.columns.values):
                 worksheet.set_row(0, 150)
                 worksheet.write(0, col_num, value, header_format)
