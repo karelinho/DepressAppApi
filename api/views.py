@@ -125,6 +125,7 @@ class DepressViewSet(viewsets.ModelViewSet):
             })
             df = df.append(pyxl_df, ignore_index=True)
             pd.to_datetime(df['datum'])
+            print(df.to_string())
             df.to_excel(writer, sheet_name='New', startrow=0, index=False, freeze_panes=(1, 0))
             worksheet = writer.sheets.setdefault('New')
             for col_num, value in enumerate(df.columns.values):
