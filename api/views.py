@@ -123,7 +123,7 @@ class DepressViewSet(viewsets.ModelViewSet):
                 'pocit napětí': [tense_feeling],
                 'délka spánku + odpočinku': [sleep_length]
             })
-            df = df.append(pyxl_df)
+            df = df.append(pyxl_df, ignore_index=True)
             pd.to_datetime(df['datum'])
             df.to_excel(writer, sheet_name='New', startrow=0, index=False, freeze_panes=(1, 0))
             worksheet = writer.sheets.setdefault('New')
