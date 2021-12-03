@@ -123,7 +123,7 @@ class DepressViewSet(viewsets.ModelViewSet):
                 'pocit napětí': [tense_feeling],
                 'délka spánku + odpočinku': [sleep_length]
             })
-            df = df.append(pyxl_df, ignore_index=True)
+            df.append(pyxl_df, ignore_index=True)
             pd.to_datetime(df['datum'])
             print(df.to_string())
             df.to_excel(writer, sheet_name='New', startrow=0, index=False, freeze_panes=(1, 0))
@@ -132,7 +132,6 @@ class DepressViewSet(viewsets.ModelViewSet):
                 worksheet.set_row(0, 150)
                 worksheet.write(0, col_num, value, header_format)
             writer.save()
-            writer.close()
 
             try:
                 depress_data = Depress.objects.get(user=user.id, date=new_date)
