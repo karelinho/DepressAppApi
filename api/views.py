@@ -100,13 +100,6 @@ class DepressViewSet(viewsets.ModelViewSet):
 
             # pyxl_df = pd.read_excel('karelsluka.xlsx', sheet_name=0, engine='openpyxl', dtype={'datum': date})
             pyxl_df = pd.read_excel('karelsluka.xlsx', sheet_name=0, engine='openpyxl')
-            writer = pd.ExcelWriter('karelsluka.xlsx', engine='xlsxwriter', date_format='DD.MM.YYYY',
-                                    datetime_format='DD.MM.YYYY')
-            book = writer.book
-            header_format = book.add_format({
-                'text_wrap': True,
-                'rotation': 90
-            })
             parsed_date = new_date.split('-')
             df = pd.DataFrame({
                 'datum': [datetime.datetime(int(parsed_date[0]), int(parsed_date[1]), int(parsed_date[2]))],
@@ -126,12 +119,18 @@ class DepressViewSet(viewsets.ModelViewSet):
             new_df = df.append(pyxl_df, ignore_index=True)
             pd.to_datetime(new_df['datum'])
             print(new_df.to_string())
+            writer = pd.ExcelWriter('karelsluka.xlsx', engine='xlsxwriter', date_format='DD.MM.YYYY',
+                                    datetime_format='DD.MM.YYYY')
+            book = writer.book
+            header_format = book.add_format({
+                'text_wrap': True,
+                'rotation': 90
+            })
             new_df.to_excel(writer, sheet_name='New', startrow=0, index=False, freeze_panes=(1, 0))
             worksheet = writer.sheets.setdefault('New')
             for col_num, value in enumerate(new_df.columns.values):
                 worksheet.set_row(0, 150)
                 worksheet.write(0, col_num, value, header_format)
-                print('value: ', value)
             writer.save()
 
             try:
