@@ -123,14 +123,15 @@ class DepressViewSet(viewsets.ModelViewSet):
                 'pocit napětí': [tense_feeling],
                 'délka spánku + odpočinku': [sleep_length]
             })
-            df.append(pyxl_df, ignore_index=True)
-            pd.to_datetime(df['datum'])
-            print(df.to_string())
-            df.to_excel(writer, sheet_name='New', startrow=0, index=False, freeze_panes=(1, 0))
+            new_df = df.append(pyxl_df, ignore_index=True)
+            pd.to_datetime(new_df['datum'])
+            print(new_df.to_string())
+            new_df.to_excel(writer, sheet_name='New', startrow=0, index=False, freeze_panes=(1, 0))
             worksheet = writer.sheets.setdefault('New')
-            for col_num, value in enumerate(df.columns.values):
+            for col_num, value in enumerate(new_df.columns.values):
                 worksheet.set_row(0, 150)
                 worksheet.write(0, col_num, value, header_format)
+                print('value: ', value)
             writer.save()
 
             try:
