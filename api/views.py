@@ -96,9 +96,7 @@ class DepressViewSet(viewsets.ModelViewSet):
             tense_feeling = request.data['tense_feeling']
             sleep_length = request.data['sleep_length']
             user = request.user
-            # user = User.objects.get(id=1)
 
-            # pyxl_df = pd.read_excel('karelsluka.xlsx', sheet_name=0, engine='openpyxl', dtype={'datum': date})
             pyxl_df = pd.read_excel('karelsluka.xlsx', sheet_name=0, engine='openpyxl')
             parsed_date = new_date.split('-')
             df = pd.DataFrame({
@@ -118,11 +116,8 @@ class DepressViewSet(viewsets.ModelViewSet):
             })
             new_df = df.append(pyxl_df, ignore_index=True)
             pd.to_datetime(new_df['datum'])
-            print(new_df.to_string())
-            # writer = pd.ExcelWriter('karelsluka.xlsx', engine='xlsxwriter', date_format='DD.MM.YYYY',
-            #                        datetime_format='DD.MM.YYYY', mode='a')
-            writer = pd.ExcelWriter('karelsluka.xlsx', date_format='DD.MM.YYYY',
-                                    datetime_format='DD.MM.YYYY', mode='a')
+            writer = pd.ExcelWriter('karelsluka.xlsx', engine='xlsxwriter', date_format='DD.MM.YYYY',
+                                    datetime_format='DD.MM.YYYY')
             book = writer.book
             header_format = book.add_format({
                 'text_wrap': True,
@@ -134,6 +129,7 @@ class DepressViewSet(viewsets.ModelViewSet):
                 worksheet.set_row(0, 150)
                 worksheet.write(0, col_num, value, header_format)
             writer.save()
+            writer.close()
 
             try:
                 depress_data = Depress.objects.get(user=user.id, date=new_date)
