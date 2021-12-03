@@ -119,7 +119,9 @@ class DepressViewSet(viewsets.ModelViewSet):
             new_df = df.append(pyxl_df, ignore_index=True)
             pd.to_datetime(new_df['datum'])
             print(new_df.to_string())
-            writer = pd.ExcelWriter('karelsluka.xlsx', engine='xlsxwriter', date_format='DD.MM.YYYY',
+            # writer = pd.ExcelWriter('karelsluka.xlsx', engine='xlsxwriter', date_format='DD.MM.YYYY',
+            #                        datetime_format='DD.MM.YYYY', mode='a')
+            writer = pd.ExcelWriter('karelsluka.xlsx', date_format='DD.MM.YYYY',
                                     datetime_format='DD.MM.YYYY', mode='a')
             book = writer.book
             header_format = book.add_format({
