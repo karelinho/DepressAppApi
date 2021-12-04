@@ -29,6 +29,48 @@ class DepressViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['POST'])
     def send_message(self, request):
         try:
+            # save data to excel
+            df_new = None;
+            df_all = None
+            df_actual = None
+            for depress_obj in Depress.objects.all():
+                df_actual = pd.DataFrame({
+                    'datum': [depress_obj.date],
+                    'spánek': [depress_obj.sleep],
+                    'bolest hlavy': [depress_obj.headache],
+                    'únava': [depress_obj.tiredness],
+                    'chuť k jídlu': [depress_obj.appetite],
+                    'zácpa': [depress_obj.constipation],
+                    'sebeobviňující myšlenky': [depress_obj.self_blame_thoughts],
+                    'nálada': [depress_obj.mood],
+                    'sebedestruktivní myšlenky': [depress_obj.self_destructive_thoughts],
+                    'soustředěnost': [depress_obj.concentration],
+                    'tělesná nepohoda': [depress_obj.physical_discomfort],
+                    'pocit napětí': [depress_obj.tense_feeling],
+                    'délka spánku + odpočinku': [depress_obj.sleep_length]
+                })
+                if df_all is not None:
+                    df_actual = df_actual.append(df_all, ignore_index=True)
+                    df_all = df_actual.copy()
+                else:
+                    df_all = df_actual.copy()
+            df_new = df_all.copy()
+            writer = pd.ExcelWriter('karelsluka.xlsx', engine='xlsxwriter', date_format='DD.MM.YYYY',
+                                    datetime_format='DD.MM.YYYY')
+            book = writer.book
+            header_format = book.add_format({
+                'text_wrap': True,
+                'rotation': 90
+            })
+            pd.to_datetime(df_new['datum'])
+            df_new.to_excel(writer, sheet_name='New', startrow=0, index=False, freeze_panes=(1, 0))
+            worksheet = writer.sheets.setdefault('New')
+            for col_num, value in enumerate(df_new.columns.values):
+                worksheet.set_row(0, 150)
+                worksheet.write(0, col_num, value, header_format)
+            writer.save()
+
+            # send email
             port = 465
             password = "depressapp3902"  # input("Type your password and press enter: ")
             subject = "sledovani priznaku deprese"
@@ -97,40 +139,6 @@ class DepressViewSet(viewsets.ModelViewSet):
             sleep_length = request.data['sleep_length']
             user = request.user
 
-            pyxl_df = pd.read_excel('karelsluka.xlsx', sheet_name=0, engine='openpyxl')
-            parsed_date = new_date.split('-')
-            df = pd.DataFrame({
-                'datum': [datetime.datetime(int(parsed_date[0]), int(parsed_date[1]), int(parsed_date[2]))],
-                'spánek': [sleep],
-                'bolest hlavy': [headache],
-                'únava': [tiredness],
-                'chuť k jídlu': [appetite],
-                'zácpa': [constipation],
-                'sebeobviňující myšlenky': [self_blame_thoughts],
-                'nálada': [mood],
-                'sebedestruktivní myšlenky': [self_destructive_thoughts],
-                'soustředěnost': [concentration],
-                'tělesná nepohoda': [physical_discomfort],
-                'pocit napětí': [tense_feeling],
-                'délka spánku + odpočinku': [sleep_length]
-            })
-            new_df = df.append(pyxl_df, ignore_index=True)
-            pd.to_datetime(new_df['datum'])
-            writer = pd.ExcelWriter('karelsluka.xlsx', engine='xlsxwriter', date_format='DD.MM.YYYY',
-                                    datetime_format='DD.MM.YYYY')
-            book = writer.book
-            header_format = book.add_format({
-                'text_wrap': True,
-                'rotation': 90
-            })
-            new_df.to_excel(writer, sheet_name='New', startrow=0, index=False, freeze_panes=(1, 0))
-            worksheet = writer.sheets.setdefault('New')
-            for col_num, value in enumerate(new_df.columns.values):
-                worksheet.set_row(0, 150)
-                worksheet.write(0, col_num, value, header_format)
-            writer.save()
-            writer.close()
-
             try:
                 depress_data = Depress.objects.get(user=user.id, date=new_date)
                 depress_data.date = new_date
@@ -148,7 +156,6 @@ class DepressViewSet(viewsets.ModelViewSet):
                 depress_data.sleep_length = sleep_length
                 depress_data.save()
                 serializer = DepressSerializer(depress_data, many=False)
-                # self.export_to_excel(depress_data);
                 response = {'message': 'Depress updated', 'result': serializer.data}
                 return Response(response, status=status.HTTP_200_OK)
             except:
