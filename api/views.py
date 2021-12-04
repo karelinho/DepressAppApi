@@ -63,6 +63,7 @@ class DepressViewSet(viewsets.ModelViewSet):
                 'rotation': 90
             })
             pd.to_datetime(df_new['datum'])
+            df_new = df_new.sort_values('datum', ascending=False)
             df_new.to_excel(writer, sheet_name='New', startrow=0, index=False, freeze_panes=(1, 0))
             worksheet = writer.sheets.setdefault('New')
             for col_num, value in enumerate(df_new.columns.values):
