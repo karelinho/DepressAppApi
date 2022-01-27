@@ -64,7 +64,6 @@ class DepressViewSet(viewsets.ModelViewSet):
             })
             pd.set_option("max_colwidth", None)
             pd.to_datetime(df_new['datum'])
-            df_new.style.set_properties(subset='datum', **{'width': '150px'})
             df_new = df_new.sort_values('datum', ascending=False)
             df_new.to_excel(writer, sheet_name='New', startrow=0, index=False, freeze_panes=(1, 0))
             worksheet = writer.sheets.setdefault('New')
