@@ -65,7 +65,12 @@ class DepressViewSet(viewsets.ModelViewSet):
             pd.set_option("max_colwidth", None)
             pd.to_datetime(df_new['datum'])
             df_new = df_new.sort_values('datum', ascending=False)
-            df_new.to_excel(writer, sheet_name='New', startrow=0, index=False, freeze_panes=(1, 0), col_space=40)
+            df_new.to_excel(writer, sheet_name='New', startrow=0, index=False, freeze_panes=(1, 0))
+            # Auto-adjust columns' width
+            for column in df_new:
+                column_width = max(df_new[column].astype(str).map(len).max(), len(column))
+                col_idx = df_new.columns.get_loc(column)
+                writer.sheets['New'].set_column(col_idx, col_idx, column_width)
             worksheet = writer.sheets.setdefault('New')
             for col_num, value in enumerate(df_new.columns.values):
                 worksheet.set_row(0, 150)
