@@ -71,10 +71,7 @@ class DepressViewSet(viewsets.ModelViewSet):
                 worksheet.set_row(0, 150)
                 worksheet.write(0, col_num, value, header_format)
             # Auto-adjust columns' width
-            for column in df_new:
-                column_width = max(df_new[column].astype(str).map(len).max(), len(column))
-                col_idx = df_new.columns.get_loc(column)
-                writer.sheets['New'].set_column(col_idx, col_idx, column_width)
+            writer.sheets['New'].set_column(0, 0, 60)
             writer.save()
 
             # send email
