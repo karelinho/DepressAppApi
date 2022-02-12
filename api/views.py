@@ -19,8 +19,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email import encoders
 
-from UliPlot.XLSX import auto_adjust_xlsx_column_width
-
 
 class DepressViewSet(viewsets.ModelViewSet):
     queryset = Depress.objects.all()
@@ -67,8 +65,7 @@ class DepressViewSet(viewsets.ModelViewSet):
             pd.set_option("max_colwidth", None)
             pd.to_datetime(df_new['datum'])
             df_new = df_new.sort_values('datum', ascending=False)
-            df_new.to_excel(writer, sheet_name='New', startrow=0, index=False, freeze_panes=(1, 0))
-            auto_adjust_xlsx_column_width(df_new, writer, sheet_name='New', margin=0)
+            df_new.to_excel(writer, sheet_name='New', startrow=0, index=False, freeze_panes=(1, 0), col_space=40)
             worksheet = writer.sheets.setdefault('New')
             for col_num, value in enumerate(df_new.columns.values):
                 worksheet.set_row(0, 150)
