@@ -71,7 +71,7 @@ class DepressViewSet(viewsets.ModelViewSet):
                 worksheet.set_row(0, 150)
                 worksheet.write(0, col_num, value, header_format)
             # Auto-adjust columns' width
-            writer.sheets['New'].set_column(0, 0, width=60)
+            writer.sheets['New'].set_column(0, 0, width=10)
             writer.save()
 
             # send email
