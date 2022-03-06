@@ -76,10 +76,10 @@ class DepressViewSet(viewsets.ModelViewSet):
 
             # send email
             port = 465
-            password = "depressapp3902"  # input("Type your password and press enter: ")
+            password = "Depressapp3902@"  # input("Type your password and press enter: ")
             subject = "sledovani priznaku deprese"
             body = "Tento email byl vygenerovan automaticky. Prosim neodpovidejte na nej. V případě dotazu mne kontaktujte na adrese karel.sluka@gmail.com"
-            sender_email = "depressapp@gmail.com"
+            sender_email = "depressapp@centrum.cz"
             receiver_email = "karel.sluka@gmail.com"
             message = MIMEMultipart()
             message["From"] = sender_email
