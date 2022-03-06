@@ -103,8 +103,8 @@ class DepressViewSet(viewsets.ModelViewSet):
             text = message.as_string()
 
             context = ssl.create_default_context()
-            with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
-                server.login("depressapp@gmail.com", password)
+            with smtplib.SMTP_SSL("smtp.centrum.cz", port, context=context) as server:
+                server.login("depressapp@centrum.cz", password)
                 server.sendmail(sender_email, receiver_email, text)
 
             response = {'message': 'an email was sent'}
